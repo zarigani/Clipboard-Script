@@ -1,0 +1,20 @@
+(*
+		クリップボードのコピー・ペースト共通のスクリプト
+*)
+property LIB : load script file ((path to scripts folder as text) & "_lib.scpt")
+--property GUI : load script file ((path to scripts folder as text) & "_gui.scpt")
+
+on clipName()
+	tell application "Finder"
+		set myName to name of (path to me) as text --自分自身のファイル名
+		item 1 of LIB's split(myName, "_")
+	end tell
+end clipName
+
+on clipPath(n)
+	if n is "" then
+		((path to scripts folder) as text) & "clip:" & clipName() & ".scpt"
+	else
+		((path to scripts folder) as text) & "clip:" & n & ".scpt"
+	end if
+end clipPath

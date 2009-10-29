@@ -1,0 +1,17 @@
+(*
+		クリップボードをペーストする
+*)
+property LIB : load script file ((path to scripts folder as text) & "_lib.scpt")
+property GUI : load script file ((path to scripts folder as text) & "_gui.scpt")
+property CLIP : load script file ((path to scripts folder as text) & "clip:_clip_base.scpt")
+
+on run (args) --argsはリスト
+	set current_clip to (the clipboard as record)
+	set CB to load script file (CLIP's clipPath(args as text))
+	set the clipboard to CB's pb
+	
+	GUI's shortcut("", "command-V")
+	
+	delay 1
+	set the clipboard to current_clip
+end run

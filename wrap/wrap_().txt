@@ -1,0 +1,6 @@
+property GUI : load script file ((path to scripts folder as text) & "_gui.scpt")
+
+GUI's init()
+GUI's shortcut("", "command-C")
+set the clipboard to "(" & (the clipboard as string) & ")"
+GUI's shortcut("", "command-V")

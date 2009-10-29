@@ -1,0 +1,36 @@
+(*
+		クリップボードにコピーする
+*)
+property LIB : load script file ((path to scripts folder as text) & "_lib.scpt")
+property GUI : load script file ((path to scripts folder as text) & "_gui.scpt")
+property CLIP : load script file ((path to scripts folder as text) & "clip:_clip_base.scpt")
+
+on run (args) --argsはリスト
+	set current_clip to (the clipboard as record)
+	set the clipboard to ""
+	
+	set appName to GUI's frontmost_app()
+	if appName is "Finder" then
+		run script file ((path to scripts folder as text) & "clip:_copy_path.scpt")
+	else
+		GUI's shortcut("", "command-C")
+		delay 0.5
+	end if
+	
+	if (the clipboard) is "" then
+		run script file ((path to scripts folder as text) & "clip:_copy_a_link.scpt")
+	end if
+	
+	LIB's message(args, the clipboard as text)
+	
+	set CB to load script file (CLIP's clipPath(args as text))
+	set CB's pb to (the clipboard as record) --すべて
+	--set pb of CB to (the clipboard as «class rtfd») --リッチテキスト添付ファイルのみ
+	--set pb of CB to (the clipboard as «class RTF ») --リッチテキスト
+	--set pb of CB to the clipboard--テキストグループ
+	--clipboard info
+	
+	store script CB in file (CLIP's clipPath(args as text)) replacing yes
+	delay 1
+	set the clipboard to current_clip
+end run

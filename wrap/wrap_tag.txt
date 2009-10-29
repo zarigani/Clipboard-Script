@@ -1,0 +1,17 @@
+property GUI : load script file ((path to scripts folder as text) & "_gui.scpt")
+
+GUI's init()
+
+set aWord to (the clipboard as string)
+if aWord starts with "<" then set aWord to text 2 thru -1 of aWord
+if aWord starts with "/" then set aWord to text 2 thru -1 of aWord
+if aWord ends with ">" then set aWord to text 1 thru -2 of aWord
+set startTag to "<" & aWord & ">"
+set endTag to "</" & aWord & ">"
+
+set current_clip to the clipboard
+GUI's shortcut("", "command-C")
+set the clipboard to startTag & (the clipboard as string) & endTag
+GUI's shortcut("", "command-V")
+delay 1
+set the clipboard to current_clip

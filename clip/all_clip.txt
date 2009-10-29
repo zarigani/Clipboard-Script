@@ -1,0 +1,13 @@
+property LIB : load script file ((path to scripts folder as text) & "_lib.scpt")
+--property GUI : load script file ((path to scripts folder as text) & "_gui.scpt")
+property CLIP : load script file ((path to scripts folder as text) & "clip:_clip_base.scpt")
+
+set current_clip to (the clipboard as record)
+repeat with i from 1 to 5
+	set clip_name to "clip" & i
+	set CB to load script file (CLIP's clipPath(clip_name))
+	set the clipboard to CB's pb
+	delay 0.8
+	LIB's message(clip_name, the clipboard as text)
+end repeat
+set the clipboard to current_clip

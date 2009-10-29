@@ -1,0 +1,22 @@
+(*
+		Finderパスをコピーする
+*)
+property LIB : load script file ((path to scripts folder as text) & "_lib.scpt")
+--property GUI : load script file ((path to scripts folder as text) & "_gui.scpt")
+
+set AppleScript's text item delimiters to return
+tell application "Finder"
+	set path_text to the selection as text
+	set disk_name to startup disk as text
+end tell
+set AppleScript's text item delimiters to ""
+
+--起動ディスク（例 Macintosh HD:）のパスを:に置き換え
+set path_text to LIB's replace(path_text, disk_name, ":")
+
+--先頭の":"を削除
+if path_text starts with ":" then
+	set path_text to text 2 thru -1 of path_text
+end if
+
+set the clipboard to POSIX path of path_text

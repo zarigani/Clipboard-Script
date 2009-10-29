@@ -1,0 +1,15 @@
+delay 0.3 --Quicksilverから実行する時に必要
+tell application (name of (info for (path to frontmost application)))
+	activate --スクリプトメニューから実行する時に必要
+	tell application "System Events"
+		keystroke "c" using command down
+		delay 0.1
+		set selection_len to length of string of (the clipboard as record)
+		key code 123 --←
+		delay 0.1
+		key code 124 --→
+		repeat with i from 1 to selection_len - 2
+			key code 124 using shift down
+		end repeat
+	end tell
+end tell
