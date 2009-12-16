@@ -18,7 +18,11 @@ on run (args) --argsはリスト
 	end if
 	
 	if (the clipboard) is "" then
-		run script file ((path to scripts folder as text) & "clip:_copy_a_link.scpt")
+		if appName is "AppleScript Editor" then
+			run script file ((path to scripts folder as text) & "rtf_to_html2.scpt")
+		else
+			run script file ((path to scripts folder as text) & "clip:_copy_a_link.scpt")
+		end if
 	end if
 	
 	LIB's message(args, the clipboard as text)
