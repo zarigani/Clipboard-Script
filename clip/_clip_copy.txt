@@ -5,7 +5,8 @@ property LIB : load script file ((path to scripts folder as text) & "_lib.scpt")
 property GUI : load script file ((path to scripts folder as text) & "_gui.scpt")
 property CLIP : load script file ((path to scripts folder as text) & "clip:_clip_base.scpt")
 
-on run (args) --argsはリスト
+--on run (args)--だと、argsはリストになる -> CLIP's clipName(args's item 1)
+on run {args} --だと、argsはアイテムになる -> CLIP's clipName(args)
 	set current_clip to (the clipboard as record)
 	set the clipboard to ""
 	
@@ -19,22 +20,22 @@ on run (args) --argsはリスト
 	
 	if (the clipboard) is "" then
 		if appName is "AppleScript Editor" then
-			run script file ((path to scripts folder as text) & "rtf_to_html2.scpt")
+			run script file ((path to scripts folder as text) & "clip:_rtf_to_html.scpt")
 		else
 			run script file ((path to scripts folder as text) & "clip:_copy_a_link.scpt")
 		end if
 	end if
 	
-	LIB's message(args, the clipboard as text)
+	LIB's message(CLIP's clipName(args), the clipboard as text)
 	
-	set CB to load script file (CLIP's clipPath(args as text))
+	set CB to load script file (CLIP's clipPath(args))
 	set CB's pb to (the clipboard as record) --すべて
 	--set pb of CB to (the clipboard as «class rtfd») --リッチテキスト添付ファイルのみ
 	--set pb of CB to (the clipboard as «class RTF ») --リッチテキスト
 	--set pb of CB to the clipboard--テキストグループ
 	--clipboard info
 	
-	store script CB in file (CLIP's clipPath(args as text)) replacing yes
+	store script CB in file (CLIP's clipPath(args)) replacing yes
 	delay 1
 	set the clipboard to current_clip
 end run

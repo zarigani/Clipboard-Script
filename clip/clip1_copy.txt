@@ -1,5 +1,3 @@
-property CLIP : load script file ((path to scripts folder as text) & "clip:_clip_base.scpt")
-
 delay 0.2 --Quickslverで実行するにはひと呼吸必要だった
 set script_path to (path to scripts folder as text) & "clip:_clip_copy.scpt"
-run script file script_path with parameters CLIP's clipName()
+run script file script_path with parameters (path to me)

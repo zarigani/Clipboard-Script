@@ -1,20 +1,27 @@
 (*
-		クリップボードのコピー・ペースト共通のスクリプト
+		WEBページから、<a href="...">...</a>リンクを生成する
 *)
-property LIB : load script file ((path to scripts folder as text) & "_lib.scpt")
---property GUI : load script file ((path to scripts folder as text) & "_gui.scpt")
+--property LIB : load script file ((path to scripts folder as text) & "_lib.scpt")
+property GUI : load script file ((path to scripts folder as text) & "_gui.scpt")
 
-on clipName()
-	tell application "Finder"
-		set myName to name of (path to me) as text --自分自身のファイル名
-		item 1 of LIB's split(myName, "_")
-	end tell
-end clipName
+try
+	set app_name to GUI's frontmost_app()
+	set theURL to run script "tell application \"" & app_name & "\" to document 1's URL"
+	set theTitle to run script "tell application \"" & app_name & "\" to document 1's name"
+on error
+	GUI's init()
+	GUI's shortcut("", "command-L")
+	GUI's shortcut("", "command-C")
+	set theURL to the clipboard as text
+	GUI's shortcut("", "esc")
+	
+	if theURL is "" then error -127 --このスクリプト、親スクリプト、すべて中止。
+	--if theURL is "" then return --このスクリプトのみ中止。親スクリプトは継続。
+	
+	GUI's shortcut("", "command-D")
+	GUI's shortcut("", "command-C")
+	GUI's shortcut("", "esc")
+	set theTitle to the clipboard as text
+end try
 
-on clipPath(n)
-	if n is "" then
-		((path to scripts folder) as text) & "clip:" & clipName() & ".scpt"
-	else
-		((path to scripts folder) as text) & "clip:" & n & ".scpt"
-	end if
-end clipPath
+set the clipboard to "<a href=\"" & theURL & "\">" & theTitle & "</a>"

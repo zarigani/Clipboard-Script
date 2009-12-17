@@ -1,20 +1,31 @@
 (*
 		クリップボードのコピー・ペースト共通のスクリプト
 *)
-property LIB : load script file ((path to scripts folder as text) & "_lib.scpt")
+--property LIB : load script file ((path to scripts folder as text) & "_lib.scpt")
 --property GUI : load script file ((path to scripts folder as text) & "_gui.scpt")
 
-on clipName()
+on clipName(aPath)
 	tell application "Finder"
-		set myName to name of (path to me) as text --自分自身のファイル名
-		item 1 of LIB's split(myName, "_")
+		set myName to aPath's name as text
+		item 1 of my split(myName, "_")
 	end tell
 end clipName
 
-on clipPath(n)
-	if n is "" then
-		((path to scripts folder) as text) & "clip:" & clipName() & ".scpt"
-	else
-		((path to scripts folder) as text) & "clip:" & n & ".scpt"
-	end if
+on clipFolder(aPath)
+	tell application "Finder"
+		aPath's folder as text
+	end tell
+end clipFolder
+
+on clipPath(aPath)
+	clipFolder(aPath) & clipName(aPath) & ".scpt"
 end clipPath
+
+on split(sourceText, delimiter)
+	if sourceText = "" then return {}
+	set oldDelimiters to AppleScript's text item delimiters
+	set AppleScript's text item delimiters to {delimiter}
+	set theList to text items of sourceText
+	set AppleScript's text item delimiters to oldDelimiters
+	return theList
+end split
